@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" prefix="og: http://ogp.me/ns#" xmlns:og="http://ogp.me/ns#"><!--<![endif]-->
+
+    <head>
+                <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="author" content="">
+        <meta name="keywords" content="awesome, definitely">
+	
+        <meta property="og:site_name" content="Really Terrible Programmer">
+        <meta property="og:title" content="Really Terrible Programmer">
+        <meta property="og:url" content="/reallyterribleprogrammer.github.com/post/tiny-methods/">
+        <meta property="og:description" content="">
+    
+        <meta property="og:type" content="article" />
+        <meta property="og:article:author" content="" />
+        <meta property="og:article:published_time" content="2016-05-15T18:07:17-04:00" />
+    
+        <meta name="generator" content="Hugo 0.15" />
+        <title>tiny methods &middot; Really Terrible Programmer </title>
+        <link rel="canonical" href="/reallyterribleprogrammer.github.com" />
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="">
+        <link rel="stylesheet" type='text/css' href="/reallyterribleprogrammer.github.comcss/main.css"/>
+        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300|Montserrat:700' rel='stylesheet' type='text/css'>
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    </head>
+<body>
+<!--[if lt IE 7]><p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chrome/‎">install Google Chrome</a> to experience this site.</p><![endif]-->
+
+    <header id="site-header">
+        <div class="container">
+            <a href="/reallyterribleprogrammer.github.com" alt="Really Terrible Programmer"><h1 class="blog-title heading">Really Terrible Programmer</h1></a>
+            <p class="blog-description"></p>
+        </div>
+    </header>
+<main class="content" role="main">
+	<div class="container">
+		<article class="post">
+	<header class="post-header">
+        <h3 class="p-post-title">tiny methods</h3>
+    </header>
+
+    <section class="post-content">
+        <p>If you had this:</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">public</span> <span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">attemptRegistration</span><span style="color: #333333">(</span>User user<span style="color: #333333">)</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">if</span> <span style="color: #333333">(</span>UserTable<span style="color: #333333">.</span><span style="color: #0000CC">count</span><span style="color: #333333">()</span> <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">1000</span><span style="color: #333333">)</span> <span style="color: #333333">{</span>
+    preventRegistration<span style="color: #333333">(</span>user<span style="color: #333333">);</span>
+  <span style="color: #333333">}</span> <span style="color: #008800; font-weight: bold">else</span> <span style="color: #333333">{</span>
+    continueRegistration<span style="color: #333333">(</span>user<span style="color: #333333">);</span>
+  <span style="color: #333333">}</span>
+<span style="color: #333333">}</span>
+</pre></div>
+
+<p>Would putting the body of that if-statement into its own method be a
+worthwhile refactor?</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">public</span> <span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">attemptRegistration</span><span style="color: #333333">(</span>User user<span style="color: #333333">)</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">if</span> <span style="color: #333333">(</span>atMax<span style="color: #333333">())</span> <span style="color: #333333">{</span>
+    preventRegistration<span style="color: #333333">(</span>user<span style="color: #333333">);</span>
+  <span style="color: #333333">}</span> <span style="color: #008800; font-weight: bold">else</span> <span style="color: #333333">{</span>
+    continueRegistration<span style="color: #333333">(</span>user<span style="color: #333333">);</span>
+  <span style="color: #333333">}</span>
+<span style="color: #333333">}</span>
+
+<span style="color: #008800; font-weight: bold">private</span> <span style="color: #333399; font-weight: bold">boolean</span> <span style="color: #0066BB; font-weight: bold">atMax</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">return</span> UserTable<span style="color: #333333">.</span><span style="color: #0000CC">count</span><span style="color: #333333">()</span> <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">1000</span><span style="color: #333333">;</span>
+<span style="color: #333333">}</span>
+</pre></div>
+
+<p>What if that condition was more complex? Now is it worth it?</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">public</span> <span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">attemptRegistration</span><span style="color: #333333">(</span>User user<span style="color: #333333">)</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">if</span> <span style="color: #333333">(</span>atMax<span style="color: #333333">()</span> <span style="color: #333333">||</span> registrationClosed<span style="color: #333333">())</span> <span style="color: #333333">{</span>
+    preventRegistration<span style="color: #333333">(</span>user<span style="color: #333333">);</span>
+  <span style="color: #333333">}</span> <span style="color: #008800; font-weight: bold">else</span> <span style="color: #333333">{</span>
+    continueRegistration<span style="color: #333333">(</span>user<span style="color: #333333">);</span>
+  <span style="color: #333333">}</span>
+<span style="color: #333333">}</span>
+
+<span style="color: #008800; font-weight: bold">private</span> <span style="color: #333399; font-weight: bold">boolean</span> <span style="color: #0066BB; font-weight: bold">atMax</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">return</span> UserTable<span style="color: #333333">.</span><span style="color: #0000CC">count</span><span style="color: #333333">()</span> <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">1000</span><span style="color: #333333">;</span>
+<span style="color: #333333">}</span>
+
+<span style="color: #008800; font-weight: bold">private</span> <span style="color: #333399; font-weight: bold">boolean</span> <span style="color: #0066BB; font-weight: bold">registrationClosed</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">return</span> Registrar<span style="color: #333333">.</span><span style="color: #0000CC">isClosed</span><span style="color: #333333">();</span>
+<span style="color: #333333">}</span>
+</pre></div>
+
+<p>How about combining those two private methods?</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">public</span> <span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">attemptRegistration</span><span style="color: #333333">(</span>User user<span style="color: #333333">)</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">if</span> <span style="color: #333333">(</span>shouldPreventRegistration<span style="color: #333333">())</span> <span style="color: #333333">{</span>
+    preventRegistration<span style="color: #333333">(</span>user<span style="color: #333333">);</span>
+  <span style="color: #333333">}</span> <span style="color: #008800; font-weight: bold">else</span> <span style="color: #333333">{</span>
+    continueRegistration<span style="color: #333333">(</span>user<span style="color: #333333">);</span>
+  <span style="color: #333333">}</span>
+<span style="color: #333333">}</span>
+
+<span style="color: #008800; font-weight: bold">private</span> <span style="color: #333399; font-weight: bold">boolean</span> <span style="color: #0066BB; font-weight: bold">shouldPreventRegistration</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">return</span> UserTable<span style="color: #333333">.</span><span style="color: #0000CC">count</span><span style="color: #333333">()</span> <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">1000</span> <span style="color: #333333">||</span> Registrar<span style="color: #333333">.</span><span style="color: #0000CC">isClosed</span><span style="color: #333333">();</span>
+<span style="color: #333333">}</span>
+</pre></div>
+
+<p>Or breaking it down even further?</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">public</span> <span style="color: #333399; font-weight: bold">void</span> <span style="color: #0066BB; font-weight: bold">attemptRegistration</span><span style="color: #333333">(</span>User user<span style="color: #333333">)</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">if</span> <span style="color: #333333">(</span>shouldPreventRegistration<span style="color: #333333">())</span> <span style="color: #333333">{</span>
+    preventRegistration<span style="color: #333333">(</span>user<span style="color: #333333">);</span>
+  <span style="color: #333333">}</span> <span style="color: #008800; font-weight: bold">else</span> <span style="color: #333333">{</span>
+    continueRegistration<span style="color: #333333">(</span>user<span style="color: #333333">);</span>
+  <span style="color: #333333">}</span>
+<span style="color: #333333">}</span>
+
+<span style="color: #008800; font-weight: bold">private</span> <span style="color: #333399; font-weight: bold">boolean</span> <span style="color: #0066BB; font-weight: bold">shouldPreventRegistration</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">return</span> atMax<span style="color: #333333">()</span> <span style="color: #333333">||</span> registrationClosed<span style="color: #333333">();</span>
+<span style="color: #333333">}</span>
+
+<span style="color: #008800; font-weight: bold">private</span> <span style="color: #333399; font-weight: bold">boolean</span> <span style="color: #0066BB; font-weight: bold">atMax</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">return</span> UserTable<span style="color: #333333">.</span><span style="color: #0000CC">count</span><span style="color: #333333">()</span> <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">1000</span><span style="color: #333333">;</span>
+<span style="color: #333333">}</span>
+
+<span style="color: #008800; font-weight: bold">private</span> <span style="color: #333399; font-weight: bold">boolean</span> <span style="color: #0066BB; font-weight: bold">registrationClosed</span><span style="color: #333333">()</span> <span style="color: #333333">{</span>
+  <span style="color: #008800; font-weight: bold">return</span> Registrar<span style="color: #333333">.</span><span style="color: #0000CC">isClosed</span><span style="color: #333333">();</span>
+<span style="color: #333333">}</span>
+</pre></div>
+
+<p>What if I told you these private methods are only ever used in
+<code>attemptRegistration(User)</code>?</p>
+
+<p>Does the language being used change what you think?</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">attempt_registration</span>(user)
+  <span style="color: #008800; font-weight: bold">if</span> prevent_registration?
+    prevent_registration(user)
+  <span style="color: #008800; font-weight: bold">else</span>
+    continue_registration(user)
+  <span style="color: #008800; font-weight: bold">end</span>
+<span style="color: #008800; font-weight: bold">end</span>
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">prevent_registration?</span>
+  at_max? <span style="color: #333333">||</span> registration_closed?
+<span style="color: #008800; font-weight: bold">end</span>
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">at_max?</span>
+  <span style="color: #003366; font-weight: bold">UserTable</span><span style="color: #333333">.</span>count <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">1000</span>
+<span style="color: #008800; font-weight: bold">end</span>
+
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">registration_closed?</span>
+  <span style="color: #003366; font-weight: bold">Registrar</span><span style="color: #333333">.</span>closed?
+<span style="color: #008800; font-weight: bold">end</span>
+</pre></div>
+
+<p>After all, it could&rsquo;ve been written in much fewer lines:</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">attempt_registration</span>(user)
+  <span style="color: #008800; font-weight: bold">if</span> <span style="color: #003366; font-weight: bold">UserTable</span><span style="color: #333333">.</span>count <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">1000</span> <span style="color: #333333">||</span> <span style="color: #003366; font-weight: bold">Registrar</span><span style="color: #333333">.</span>closed?
+    prevent_registration(user)
+  <span style="color: #008800; font-weight: bold">else</span>
+    continue_registration(user)
+  <span style="color: #008800; font-weight: bold">end</span>
+<span style="color: #008800; font-weight: bold">end</span>
+</pre></div>
+
+<p>At least we can all agree on naming that magic number:</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #003366; font-weight: bold">MAX_USER_COUNT</span> <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">1000</span>
+</pre></div>
+
+<p>&hellip;Maybe.</p>
+
+<p>I&rsquo;ve committed to or abstained from all of these refactorings at points
+in my career, and I&rsquo;ve received pushback for all such cases.</p>
+
+<p>I&rsquo;ve settled on what I like best though: I like tiny methods. I <em>love</em>
+tiny methods. I think of their names as terse, compiler-enforced
+documentation of what&rsquo;s happening. They also introduce a level of
+indirection that gives a single point to refactor if something
+changes. Like imagine if <code>prevent_registration?</code> actually had to be this:</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">prevent_registration?</span>(user)
+  at_max? <span style="color: #333333">||</span> registration_closed? <span style="color: #333333">||</span> blacklisted?(user)
+<span style="color: #008800; font-weight: bold">end</span>
+</pre></div>
+
+<p>Now I just look for occurrences of <code>prevent_registration?</code> instead of
+<code>at_max? || registration_closed?</code>. Well, hopefully no one used
+<code>registration_closed? || at_max?</code>. Even if I was in a sane (statically typed)
+language I wouldn&rsquo;t get the benefit of the IDE&rsquo;s refactoring tools,
+unless it was smart enough to let me specify I&rsquo;m looking for these two
+predicates as arguments to a <code>||</code>&hellip;</p>
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%"><span></span>ugh<span style="color: #333333">()</span> <span style="color: #888888">// ...Whatever, I&#39;ll just keep putting my comments on the same line as what they&#39;re about on so you&#39;ll criticize that instead of my tiny methods &gt;:)</span>
+</pre></div>
+
+    </section>
+
+    <hr>
+
+    <footer class="post-footer">
+        <section class="f-1">
+            
+            
+            <p class="f-post-time"><time datetime="2016-05-15T18:07:17-04:00">May 15, 2016</time></p>
+        </section>
+                        
+        <section class="f-2">
+            <section class="share">
+                <span>Share:
+                <a class="icon-twitter" href="http://twitter.com/share?text=tiny%20methods&url=%2freallyterribleprogrammer.github.com%2fpost%2ftiny-methods%2f"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=%2freallyterribleprogrammer.github.com%2fpost%2ftiny-methods%2f"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=%2freallyterribleprogrammer.github.com%2fpost%2ftiny-methods%2f"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+                </span>
+            </section>
+
+            
+        </section>
+                        
+    </footer>
+</article>
+	</div>
+</main>
+    <footer id="site-footer">
+        <div class="container">
+            <a href="/reallyterribleprogrammer.github.comindex.xml" title="Get the RSS feed"><span class="tooltip"><i class="fa fa-rss"></i></span></a>
+            <section>&copy; <a href="/reallyterribleprogrammer.github.com"></a> 2015 | All rights reserved</section>
+            <section>Theme by <a href="http://www.jrdnbwmn.com">Jordan Bowman</a>. Generated with <a href="http://gohugo.io/">Hugo</a>.</section>
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="/reallyterribleprogrammer.github.comjs/fittext.js"></script>
+    <script type="text/javascript">
+      $(".heading").fitText();
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Really Terrible Programmer</title>
+    <link>reallyterribleprogrammer.github.com/post/</link>
+    <description>Recent content in Posts on Really Terrible Programmer</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 15 May 2016 18:07:17 -0400</lastBuildDate>
+    <atom:link href="reallyterribleprogrammer.github.com/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>tiny methods</title>
+      <link>/reallyterribleprogrammer.github.com/post/tiny-methods/</link>
+      <pubDate>Sun, 15 May 2016 18:07:17 -0400</pubDate>
+      
+      <guid>/reallyterribleprogrammer.github.com/post/tiny-methods/</guid>
+      <description>&lt;p&gt;If you had this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;attemptRegistration&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;User user&lt;span style=&#34;color: #333333&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;UserTable&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #0000CC&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000DD; font-weight: bold&#34;&gt;1000&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+    preventRegistration&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;user&lt;span style=&#34;color: #333333&#34;&gt;);&lt;/span&gt;
+  &lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+    continueRegistration&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;user&lt;span style=&#34;color: #333333&#34;&gt;);&lt;/span&gt;
+  &lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Would putting the body of that if-statement into its own method be a
+worthwhile refactor?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;attemptRegistration&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;User user&lt;span style=&#34;color: #333333&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;atMax&lt;span style=&#34;color: #333333&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+    preventRegistration&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;user&lt;span style=&#34;color: #333333&#34;&gt;);&lt;/span&gt;
+  &lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+    continueRegistration&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;user&lt;span style=&#34;color: #333333&#34;&gt;);&lt;/span&gt;
+  &lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;atMax&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;return&lt;/span&gt; UserTable&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #0000CC&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000DD; font-weight: bold&#34;&gt;1000&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;What if that condition was more complex? Now is it worth it?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;attemptRegistration&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;User user&lt;span style=&#34;color: #333333&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;atMax&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;||&lt;/span&gt; registrationClosed&lt;span style=&#34;color: #333333&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+    preventRegistration&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;user&lt;span style=&#34;color: #333333&#34;&gt;);&lt;/span&gt;
+  &lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+    continueRegistration&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;user&lt;span style=&#34;color: #333333&#34;&gt;);&lt;/span&gt;
+  &lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;atMax&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;return&lt;/span&gt; UserTable&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #0000CC&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000DD; font-weight: bold&#34;&gt;1000&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;registrationClosed&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;return&lt;/span&gt; Registrar&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #0000CC&#34;&gt;isClosed&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;();&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;How about combining those two private methods?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;attemptRegistration&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;User user&lt;span style=&#34;color: #333333&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;shouldPreventRegistration&lt;span style=&#34;color: #333333&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+    preventRegistration&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;user&lt;span style=&#34;color: #333333&#34;&gt;);&lt;/span&gt;
+  &lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+    continueRegistration&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;user&lt;span style=&#34;color: #333333&#34;&gt;);&lt;/span&gt;
+  &lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;shouldPreventRegistration&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;return&lt;/span&gt; UserTable&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #0000CC&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000DD; font-weight: bold&#34;&gt;1000&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;||&lt;/span&gt; Registrar&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #0000CC&#34;&gt;isClosed&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;();&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Or breaking it down even further?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;attemptRegistration&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;User user&lt;span style=&#34;color: #333333&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;shouldPreventRegistration&lt;span style=&#34;color: #333333&#34;&gt;())&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+    preventRegistration&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;user&lt;span style=&#34;color: #333333&#34;&gt;);&lt;/span&gt;
+  &lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+    continueRegistration&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;user&lt;span style=&#34;color: #333333&#34;&gt;);&lt;/span&gt;
+  &lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;shouldPreventRegistration&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;return&lt;/span&gt; atMax&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;||&lt;/span&gt; registrationClosed&lt;span style=&#34;color: #333333&#34;&gt;();&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;atMax&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;return&lt;/span&gt; UserTable&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #0000CC&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000DD; font-weight: bold&#34;&gt;1000&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;;&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;registrationClosed&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;return&lt;/span&gt; Registrar&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #0000CC&#34;&gt;isClosed&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;();&lt;/span&gt;
+&lt;span style=&#34;color: #333333&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;What if I told you these private methods are only ever used in
+&lt;code&gt;attemptRegistration(User)&lt;/code&gt;?&lt;/p&gt;
+
+&lt;p&gt;Does the language being used change what you think?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;attempt_registration&lt;/span&gt;(user)
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;if&lt;/span&gt; prevent_registration?
+    prevent_registration(user)
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;else&lt;/span&gt;
+    continue_registration(user)
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;prevent_registration?&lt;/span&gt;
+  at_max? &lt;span style=&#34;color: #333333&#34;&gt;||&lt;/span&gt; registration_closed?
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;at_max?&lt;/span&gt;
+  &lt;span style=&#34;color: #003366; font-weight: bold&#34;&gt;UserTable&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;count &lt;span style=&#34;color: #333333&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000DD; font-weight: bold&#34;&gt;1000&lt;/span&gt;
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;end&lt;/span&gt;
+
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;registration_closed?&lt;/span&gt;
+  &lt;span style=&#34;color: #003366; font-weight: bold&#34;&gt;Registrar&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;closed?
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;After all, it could&amp;rsquo;ve been written in much fewer lines:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;attempt_registration&lt;/span&gt;(user)
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #003366; font-weight: bold&#34;&gt;UserTable&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;count &lt;span style=&#34;color: #333333&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000DD; font-weight: bold&#34;&gt;1000&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color: #003366; font-weight: bold&#34;&gt;Registrar&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;closed?
+    prevent_registration(user)
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;else&lt;/span&gt;
+    continue_registration(user)
+  &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;end&lt;/span&gt;
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;At least we can all agree on naming that magic number:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #003366; font-weight: bold&#34;&gt;MAX_USER_COUNT&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000DD; font-weight: bold&#34;&gt;1000&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&amp;hellip;Maybe.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve committed to or abstained from all of these refactorings at points
+in my career, and I&amp;rsquo;ve received pushback for all such cases.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve settled on what I like best though: I like tiny methods. I &lt;em&gt;love&lt;/em&gt;
+tiny methods. I think of their names as terse, compiler-enforced
+documentation of what&amp;rsquo;s happening. They also introduce a level of
+indirection that gives a single point to refactor if something
+changes. Like imagine if &lt;code&gt;prevent_registration?&lt;/code&gt; actually had to be this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;prevent_registration?&lt;/span&gt;(user)
+  at_max? &lt;span style=&#34;color: #333333&#34;&gt;||&lt;/span&gt; registration_closed? &lt;span style=&#34;color: #333333&#34;&gt;||&lt;/span&gt; blacklisted?(user)
+&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;end&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now I just look for occurrences of &lt;code&gt;prevent_registration?&lt;/code&gt; instead of
+&lt;code&gt;at_max? || registration_closed?&lt;/code&gt;. Well, hopefully no one used
+&lt;code&gt;registration_closed? || at_max?&lt;/code&gt;. Even if I was in a sane (statically typed)
+language I wouldn&amp;rsquo;t get the benefit of the IDE&amp;rsquo;s refactoring tools,
+unless it was smart enough to let me specify I&amp;rsquo;m looking for these two
+predicates as arguments to a &lt;code&gt;||&lt;/code&gt;&amp;hellip;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;ugh&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #888888&#34;&gt;// ...Whatever, I&amp;#39;ll just keep putting my comments on the same line as what they&amp;#39;re about on so you&amp;#39;ll criticize that instead of my tiny methods &amp;gt;:)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
