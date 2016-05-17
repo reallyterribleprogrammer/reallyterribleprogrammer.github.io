@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Really Terrible Programmer</title>
-    <link>reallyterribleprogrammer.github.com/</link>
+    <link>https://reallyterribleprogrammer.github.io/</link>
     <description>Recent content on Really Terrible Programmer</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 15 May 2016 18:07:17 -0400</lastBuildDate>
-    <atom:link href="reallyterribleprogrammer.github.com/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://reallyterribleprogrammer.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>tiny methods</title>
-      <link>/reallyterribleprogrammer.github.com/post/tiny-methods/</link>
+      <link>https://reallyterribleprogrammer.github.io/post/tiny-methods/</link>
       <pubDate>Sun, 15 May 2016 18:07:17 -0400</pubDate>
       
-      <guid>/reallyterribleprogrammer.github.com/post/tiny-methods/</guid>
+      <guid>https://reallyterribleprogrammer.github.io/post/tiny-methods/</guid>
       <description>&lt;p&gt;If you had this:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34; style=&#34;background: #ffffff&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color: #333399; font-weight: bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color: #0066BB; font-weight: bold&#34;&gt;attemptRegistration&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;User user&lt;span style=&#34;color: #333333&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
   &lt;span style=&#34;color: #008800; font-weight: bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;(&lt;/span&gt;UserTable&lt;span style=&#34;color: #333333&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color: #0000CC&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color: #0000DD; font-weight: bold&#34;&gt;1000&lt;/span&gt;&lt;span style=&#34;color: #333333&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color: #333333&#34;&gt;{&lt;/span&gt;
